@@ -5,12 +5,12 @@ Tests R6: Book Search functionality
 
 import pytest
 from unittest.mock import patch
-from library_service import search_books_in_catalog
+from services.library_service import search_books_in_catalog
 
 
 def test_search_by_title():
     """Test searching by title"""
-    with patch('library_service.get_all_books') as mock_get_all_books:
+    with patch('services.library_service.get_all_books') as mock_get_all_books:
         mock_get_all_books.return_value = [
             {"id": 1, "title": "Python Programming", "author": "John Doe", "isbn": "1234567890123"},
             {"id": 2, "title": "Learning Java", "author": "Jane Smith", "isbn": "9876543210987"},
@@ -26,7 +26,7 @@ def test_search_by_title():
 
 def test_search_by_author():
     """Test searching by author"""
-    with patch('library_service.get_all_books') as mock_get_all_books:
+    with patch('services.library_service.get_all_books') as mock_get_all_books:
         mock_get_all_books.return_value = [
             {"id": 1, "title": "Python Programming", "author": "John Doe", "isbn": "1234567890123"},
             {"id": 2, "title": "Learning Java", "author": "Jane Smith", "isbn": "9876543210987"},
@@ -41,7 +41,7 @@ def test_search_by_author():
 
 def test_search_by_isbn():
     """Test searching by exact ISBN"""
-    with patch('library_service.get_all_books') as mock_get_all_books:
+    with patch('services.library_service.get_all_books') as mock_get_all_books:
         mock_get_all_books.return_value = [
             {"id": 1, "title": "Python Programming", "author": "John Doe", "isbn": "1234567890123"},
             {"id": 2, "title": "Learning Java", "author": "Jane Smith", "isbn": "9876543210987"},
@@ -57,7 +57,7 @@ def test_search_by_isbn():
 
 def test_search_case_insensitive():
     """Test that search is case insensitive"""
-    with patch('library_service.get_all_books') as mock_get_books:
+    with patch('services.library_service.get_all_books') as mock_get_books:
         mock_get_books.return_value = [{
             "id": 1, 
             "title": "The Great Gatsby",
@@ -74,7 +74,7 @@ def test_search_case_insensitive():
 
 def test_search_no_results():
     """Test search with no matching results"""
-    with patch('library_service.get_all_books') as mock_get_books:
+    with patch('services.library_service.get_all_books') as mock_get_books:
         mock_get_books.return_value = [{
             "id": 1, 
             "title": "The Great Gatsby",

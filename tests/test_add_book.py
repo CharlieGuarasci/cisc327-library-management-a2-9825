@@ -5,13 +5,13 @@ Tests R1: Book Catalog Management functionality
 
 import pytest
 from unittest.mock import patch
-from library_service import add_book_to_catalog
+from services.library_service import add_book_to_catalog
 
 
 def test_add_book_valid_input():
     # Test adding a book with valid input.
-    with patch('library_service.get_book_by_isbn', return_value=None), \
-         patch('library_service.insert_book', return_value=True):
+    with patch('services.library_service.get_book_by_isbn', return_value=None), \
+         patch('services.library_service.insert_book', return_value=True):
         
         success, message = add_book_to_catalog("Test Book", "Test Author", "1234567890123", 5)
         
@@ -54,7 +54,7 @@ def test_add_book_zero_copies():
 
 def test_add_book_duplicate_isbn():
     # Test adding a book with duplicate ISBN.
-    with patch('library_service.get_book_by_isbn', return_value={"id": 1, "title": "Existing Book"}):
+    with patch('services.library_service.get_book_by_isbn', return_value={"id": 1, "title": "Existing Book"}):
         success, message = add_book_to_catalog("Test Book", "Test Author", "1234567890123", 5)
         
         assert success == False

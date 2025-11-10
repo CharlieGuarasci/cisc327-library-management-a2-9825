@@ -6,12 +6,12 @@ Tests R7: Patron Status Report functionality
 import pytest
 from unittest.mock import patch
 from datetime import datetime, timedelta
-from library_service import get_patron_status_report
+from services.library_service import get_patron_status_report
 
 
 def test_patron_status_no_borrowed_books():
     """Test status for patron with no borrowed books"""
-    with patch('library_service.get_patron_borrowed_books', return_value = []):
+    with patch('services.library_service.get_patron_borrowed_books', return_value = []):
         result = get_patron_status_report("123456")
         
 
@@ -24,7 +24,7 @@ def test_patron_status_no_borrowed_books():
 
 def test_patron_status_with_borrowed_books():
     """Test status for patron with borrowed books(none overdue)"""
-    with patch('library_service.get_patron_borrowed_books') as mock_get_borrowed:
+    with patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed:
     
         due_date = datetime.now() + timedelta(days=3) # not overdue
         mock_get_borrowed.return_value = [
@@ -41,7 +41,7 @@ def test_patron_status_with_borrowed_books():
 
 def test_patron_status_with_overdue_books():
     """Test status for patron with overdue books"""
-    with patch('library_service.get_patron_borrowed_books') as mock_get_borrowed:
+    with patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed:
         current_time = datetime.now()
         overdue_due_date = current_time - timedelta(days=5) # 5 days overdue
         not_overdue = current_time + timedelta(days=1) 
@@ -63,7 +63,7 @@ def test_patron_status_with_overdue_books():
 
 def test_patron_status_with_many_overdue_books():
     """Test status for patron with two overdue books"""
-    with patch('library_service.get_patron_borrowed_books') as mock_get_borrowed:
+    with patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed:
         current_time = datetime.now()
         overdue_due_date = current_time - timedelta(days=5) # 5 days overdue
 
@@ -82,7 +82,7 @@ def test_patron_status_with_many_overdue_books():
 
 def test_patron_status_empty_borrowed_list():
     """Test status for patron with empty borrowed list"""
-    with patch('library_service.get_patron_borrowed_books', return_value = []):
+    with patch('services.library_service.get_patron_borrowed_books', return_value = []):
         result = get_patron_status_report("123456")
         
         assert result['patron_id'] == "123456"

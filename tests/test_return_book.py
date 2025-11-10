@@ -5,15 +5,15 @@ Tests R4: Book Return Processing functionality
 import pytest
 from unittest.mock import patch
 from datetime import datetime, timedelta
-from library_service import return_book_by_patron
+from services.library_service import return_book_by_patron
 
 
 def test_return_book_valid_no_late_fee():
     """Test successful retuen with no late fees"""
-    with patch('library_service.get_book_by_id') as mock_get_book, \
-        patch('library_service.get_patron_borrowed_books') as mock_get_borrowed, \
-        patch('library_service.update_borrow_record_return_date', return_value = True), \
-        patch('library_service.update_book_availability', return_value = True):
+    with patch('services.library_service.get_book_by_id') as mock_get_book, \
+        patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed, \
+        patch('services.library_service.update_borrow_record_return_date', return_value = True), \
+        patch('services.library_service.update_book_availability', return_value = True):
 
         mock_get_book.return_value = {
             "id": 1, 
@@ -37,10 +37,10 @@ def test_return_book_valid_no_late_fee():
 def test_return_book_with_late_fee():
     """Test return with late fee calculation"""
         
-    with patch('library_service.get_book_by_id') as mock_get_book, \
-        patch('library_service.get_patron_borrowed_books') as mock_get_borrowed, \
-        patch('library_service.update_borrow_record_return_date', return_value = True), \
-        patch('library_service.update_book_availability', return_value = True):
+    with patch('services.library_service.get_book_by_id') as mock_get_book, \
+        patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed, \
+        patch('services.library_service.update_borrow_record_return_date', return_value = True), \
+        patch('services.library_service.update_book_availability', return_value = True):
         mock_get_book.return_value = {
             "id": 1, 
             "title": "Test Book",
@@ -63,10 +63,10 @@ def test_return_book_with_late_fee():
 def test_return_book_late_fee_cap():
     """Test return with the fee cap($15)"""
 
-    with patch('library_service.get_book_by_id') as mock_get_book, \
-        patch('library_service.get_patron_borrowed_books') as mock_get_borrowed, \
-        patch('library_service.update_borrow_record_return_date', return_value = True), \
-        patch('library_service.update_book_availability', return_value = True):
+    with patch('services.library_service.get_book_by_id') as mock_get_book, \
+        patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed, \
+        patch('services.library_service.update_borrow_record_return_date', return_value = True), \
+        patch('services.library_service.update_book_availability', return_value = True):
         mock_get_book.return_value = {
             "id": 1, 
             "title": "Test Book",
@@ -93,7 +93,7 @@ def test_return_book_invalid_patron_id():
 
 def test_return_book_not_found():
     """Test return of non existent book"""
-    with patch('library_service.get_book_by_id', return_value = None):
+    with patch('services.library_service.get_book_by_id', return_value = None):
         success, message = return_book_by_patron("123456", 999) # non existent book ID
         
         assert success == False
@@ -103,8 +103,8 @@ def test_return_book_not_found():
 
 def test_return_book_not_borrowed_by_patron():
     """Test returning book of not borrowed by patron"""
-    with patch('library_service.get_book_by_id') as mock_get_book, \
-        patch('library_service.get_patron_borrowed_books', return_value = []):
+    with patch('services.library_service.get_book_by_id') as mock_get_book, \
+        patch('services.library_service.get_patron_borrowed_books', return_value = []):
         mock_get_book.return_value = {
             "id": 1, 
             "title": "Test Book",
@@ -119,9 +119,9 @@ def test_return_book_not_borrowed_by_patron():
 
 def test_return_book_database_error():
     """Test return when database update fails"""
-    with patch('library_service.get_book_by_id') as mock_get_book, \
-         patch('library_service.get_patron_borrowed_books') as mock_get_borrowed, \
-         patch('library_service.update_borrow_record_return_date', return_value=False):
+    with patch('services.library_service.get_book_by_id') as mock_get_book, \
+         patch('services.library_service.get_patron_borrowed_books') as mock_get_borrowed, \
+         patch('services.library_service.update_borrow_record_return_date', return_value=False):
         
         mock_get_book.return_value = {
             "id": 1, 

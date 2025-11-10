@@ -8,3 +8,9 @@ __pycache__/
 
 #SQlite database
 *.db
+
+# Coverage files
+.coverage
+.coverage.*
+htmlcov/
+*.cover
